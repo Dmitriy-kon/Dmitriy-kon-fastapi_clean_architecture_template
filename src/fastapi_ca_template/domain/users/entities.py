@@ -14,3 +14,21 @@ class User(Entity[UserId]):
 
     def validate(self):
         pass
+    
+    @staticmethod
+    def create(
+        id: int,
+        name: str,
+        email: str,
+        password: str,
+        is_active: bool
+    ):
+        return User(
+            id=UserId(id),
+            name=name,
+            email=email,
+            password=password,
+            is_active=is_active
+        )
+    
+    
