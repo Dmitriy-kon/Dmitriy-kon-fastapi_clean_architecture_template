@@ -7,3 +7,4 @@ from fastapi_ca_template.domain.exceptions.validate import DomainValidationExcep
 class UserId(ValueObject[int]):
     def validate(self):
         pass
+    
