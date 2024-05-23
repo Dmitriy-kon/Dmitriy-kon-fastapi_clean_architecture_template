@@ -7,7 +7,7 @@ class Base(DeclarativeBase):
     """ Base class for ORM models """
     __abstract__ = True
     
-class TimeMixin(Base):
+class TimeMixin():
     __abstract__ = True
     
     created_at: Mapped[datetime] = mapped_column(

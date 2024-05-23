@@ -2,8 +2,8 @@ from typing import cast
 
 from sqlalchemy.orm import mapped_column, Mapped
 
-from fastapi_ca_template.domain.users.entities import User
-from fastapi_ca_template.adapters.data_access.models.base import TimeMixin, Base
+from app.domain.users.entities import User
+from app.adapters.data_access.models.base import TimeMixin, Base
 
 
 class UserDb(TimeMixin, Base):

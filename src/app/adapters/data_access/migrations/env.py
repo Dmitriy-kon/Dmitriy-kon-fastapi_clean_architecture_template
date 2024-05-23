@@ -7,15 +7,17 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from fastapi_ca_template.adapters.data_access.models.base import Base
+
+from app.adapters.config import DatabaseConfig
+from app.adapters.data_access.models.base import Base
 
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 config.set_main_option(
-    "sqlalchemy.url", 
-    "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
+    "sqlalchemy.url",
+    DatabaseConfig.from_env().db_uri,
 )
 
 # Interpret the config file for Python logging.
