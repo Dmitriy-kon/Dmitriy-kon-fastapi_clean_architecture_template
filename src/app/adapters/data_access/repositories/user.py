@@ -1,4 +1,4 @@
-from sqlalchemy import select, insert, update
+from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.domain.users.entities import User
@@ -55,3 +55,6 @@ class SqlalchemyUserRepository(UserRepository):
         )
         await self.session.execute(stmt)
         
+    async def delete_user(self, name: str, email: str, hashed_password: str):
+        stmt = delete(UserDb).where(UserDb.email == email)
+        await self.session.execute(stmt)

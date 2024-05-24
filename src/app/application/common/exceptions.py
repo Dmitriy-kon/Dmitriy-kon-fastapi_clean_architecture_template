@@ -5,3 +5,5 @@ class ApplicationException(Exception):
         super().__init__(message)
         self.message = message
 
+class UserAlreadyExistsException(ApplicationException):
+    pass
