@@ -4,4 +4,4 @@
 venv
 **Temp
 
-.env
+.env*
