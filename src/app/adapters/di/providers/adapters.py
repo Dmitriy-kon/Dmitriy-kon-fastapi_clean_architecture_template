@@ -9,8 +9,10 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from app.domain.users.repositories import UserRepository
-from app.adapters.data_access.repositories.user import SqlalchemyUserRepository
 from app.application.abstraction.uow import UoW
+from app.application.abstraction.session_gateway import SessionGateway
+from app.adapters.in_memory_db.redis_gataway import RedisSessionGateway, RedisConfData
+from app.adapters.data_access.repositories.user import SqlalchemyUserRepository
 from app.main.config import DatabaseConfig
 
 
@@ -31,26 +33,32 @@ class SqlalchemyProvier(Provider):
             bind=engine, class_=AsyncSession, expire_on_commit=False
         )
 
-    @provide(scope=Scope.REQUEST, provides=AnyOf[AsyncSession, UoW])
+    @provide(scope=Scope.REQUEST, provides=AsyncSession)
     async def provide_session(
         self, sessionmaker: async_sessionmaker[AsyncSession]
     ) -> AsyncIterable[AsyncSession]:
         async with sessionmaker() as session:
             yield session
 
-    # @provide(scope=Scope.SESSION, provides=UoW)
-    # async def provide_uow(
-    #     self, sessionmaker: async_sessionmaker[AsyncSession]
-    # ) -> AsyncIterable[UoW]:
-    #     async with sessionmaker() as uow:
-    #         yield uow
-    # @provide(scope=Scope.REQUEST, provides=UoW)
-    # async def provide_uow(
-    #     self, sessionmaker: async_sessionmaker[AsyncSession]
-    # ) -> AsyncIterable[UoW]:
-    #     async with sessionmaker() as uow:
-    #         yield uow
-    
-    user_repository = provide(SqlalchemyUserRepository, scope=Scope.REQUEST, provides=UserRepository)
+    @provide(scope=Scope.REQUEST, provides=UoW)
+    async def provide_uow(
+        self, session: AsyncSession
+    ) -> AsyncSession:
+        return session
 
-    # async_session = provide(AsyncSession, scope=Scope.REQUEST, provides=UoW)
+    user_repository = provide(
+        SqlalchemyUserRepository, scope=Scope.REQUEST, provides=UserRepository
+    )
+    
+    # uow = provide(UoW, scope=Scope.REQUEST)
+
+class InDbProvider(Provider):
+    
+    @provide(scope=Scope.APP)
+    def provide_redis_conf(self) -> RedisConfData:
+        return RedisConfData()
+        
+    
+    redis_sessions = provide(
+        RedisSessionGateway, scope=Scope.REQUEST, provides=SessionGateway
+    )

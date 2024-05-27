@@ -5,8 +5,8 @@ from app.domain.users.entities import User
 @dataclass
 class RequestUserDTO:
     name: str
-    email: str
     password: str
+    email: str | None = None
 
 @dataclass
 class RequestLimmitOffsetDTO:

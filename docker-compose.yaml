@@ -25,13 +25,13 @@ services:
     volumes:
       - postgres_db:/var/lib/postgresql/data
 
-  # redisdb:
-  #   container_name: redis_auth
-  #   image: redis:alpine
-  #   ports:
-  #     - "6379:6379"
-  #   volumes:
-  #     - redisdata:/data
+  redisdb:
+    container_name: redis_auth
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
 
   # prometheus:
   #   image: prom/prometheus
@@ -69,7 +69,7 @@ services:
 
 volumes:
   postgres_db:
-  # redisdata:
+  redisdata:
   # prometheusdata:
   # grafanadata:
   # promlogs:

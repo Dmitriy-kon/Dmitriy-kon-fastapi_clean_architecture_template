@@ -1,4 +1,4 @@
-from abc import abstractmethod
+from abc import ABC
 from typing import Protocol
 
 

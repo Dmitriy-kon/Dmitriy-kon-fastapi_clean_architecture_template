@@ -10,3 +10,6 @@ class UserAlreadyExistsException(ApplicationException):
 
 class UserNotFoundException(ApplicationException):
     pass
+
+class UserPasswordNotMatchException(ApplicationException):
+    pass

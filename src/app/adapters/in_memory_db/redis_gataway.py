@@ -9,7 +9,7 @@ from app.application.abstraction.session_gateway import SessionGateway
 class RedisConfData:
     def __init__(self) -> None:
         self.pool = aioredis.ConnectionPool(
-            host=os.getenv("REDIS_HOST", "localhost"),
+            host=os.getenv("REDIS_HOST", "redisdb"),
             port=os.getenv("REDIS_PORT", 6379),
             password=os.getenv("REDIS_PASSWORD", None),
             db=0
