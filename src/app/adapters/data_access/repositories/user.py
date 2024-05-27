@@ -11,9 +11,9 @@ class SqlalchemyUserRepository(UserRepository):
         self.session = session
 
     async def get_all_users(self, limit: int = 20, offset: int = 0) -> list[User]:
-        query = select(UserDb).limit(limit).offset(offset)
+        stmt = select(UserDb).limit(limit).offset(offset)
 
-        users_result = await self.session.execute(query)
+        users_result = await self.session.execute(stmt)
         users = users_result.scalars()
         if users is None:
             return []
@@ -22,6 +22,15 @@ class SqlalchemyUserRepository(UserRepository):
 
     async def get_user_by_id(self, user_id: int):
         stmt = select(UserDb).where(UserDb.id == user_id)
+
+        user_result = await self.session.execute(stmt)
+        user = user_result.scalar()
+        if user is None:
+            return None
+        return user.to_entity()
+    
+    async def get_user_by_name(self, name: str):
+        stmt = select(UserDb).where(UserDb.name == name)
 
         user_result = await self.session.execute(stmt)
         user = user_result.scalar()
@@ -39,6 +48,7 @@ class SqlalchemyUserRepository(UserRepository):
         return user.to_entity()
 
     async def create_user(self, name: str, email: str, hashed_password: str):
+        # print(self.session.get_transaction())
         stmt = insert(UserDb).values(
             name=name,
             email=email,

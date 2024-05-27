@@ -8,7 +8,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 
-from app.adapters.config import DatabaseConfig
+from app.main.config import DatabaseConfig
 from app.adapters.data_access.models.base import Base
 
 

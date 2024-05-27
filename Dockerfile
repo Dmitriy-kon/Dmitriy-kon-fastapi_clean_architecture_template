@@ -18,7 +18,7 @@ RUN chmod +x scripts/start.sh
 # RUN pip install -U pip
 # RUN pip install -r requirements.txt
 # RUN pip install -e .
-RUN pip install .
+RUN pip install -e .
 
 COPY . .
 # COPY src /app/src

@@ -5,20 +5,17 @@ from app.application.common.exceptions import UserAlreadyExistsException
 from app.domain.users.repositories import UserRepository
 
 
-
-class RegisterInactiveUser(Interactor[RequestUserDTO, str]):
-    def __init__(self, 
-                 user_repository: UserRepository) -> str:
+class CheckUserUnique(Interactor[RequestUserDTO, str]):
+    def __init__(self, user_repository: UserRepository) -> str:
         self.user_repository = user_repository
 
-    async def __call__(self, 
-                       input_dto: RequestUserDTO) -> str:
-
+    async def __call__(self, input_dto: RequestUserDTO) -> str:
         user_by_email = await self.user_repository.get_user_by_email(input_dto.email)
+        if user_by_email is not None:
+            raise UserAlreadyExistsException("Email already exists")
+
         user_by_name = await self.user_repository.get_user_by_name(input_dto.name)
-        
-        if user_by_email is not None or user_by_name is not None:
-            raise UserAlreadyExistsException
-        
-        
+        if user_by_name is not None:
+            raise UserAlreadyExistsException("Name already exists")
+
         return "ok"

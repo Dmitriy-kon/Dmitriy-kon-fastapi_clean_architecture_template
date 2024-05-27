@@ -1,7 +1,10 @@
 from pydantic import BaseModel
 
 
-class SUser(BaseModel):
+class SUserOut(BaseModel):
     name: str
     email: str
+
+
+class SUserIn(SUserOut):
     password: str

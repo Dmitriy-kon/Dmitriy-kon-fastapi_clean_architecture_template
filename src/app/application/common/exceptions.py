@@ -7,3 +7,6 @@ class ApplicationException(Exception):
 
 class UserAlreadyExistsException(ApplicationException):
     pass
+
+class UserNotFoundException(ApplicationException):
+    pass

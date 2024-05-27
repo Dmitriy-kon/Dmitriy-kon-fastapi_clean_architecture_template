@@ -9,14 +9,19 @@ class RequestUserDTO:
     password: str
 
 @dataclass
+class RequestLimmitOffsetDTO:
+    offset: int
+    limit: int
+
+@dataclass
 class ResponseUserDTO:
     id: int
     name: str
     email: str
     is_active: bool
     
-    
-    def from_entity(self, entity: User) -> "ResponseUserDTO":
+    @staticmethod
+    def from_entity(entity: User) -> "ResponseUserDTO":
         return ResponseUserDTO(
             id=entity.id.get_value(),
             name=entity.name,

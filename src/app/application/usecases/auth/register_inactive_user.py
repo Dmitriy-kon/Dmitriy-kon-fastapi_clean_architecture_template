@@ -19,8 +19,25 @@ class RegisterInactiveUser(Interactor[RequestUserDTO, str]):
         await self.user_repository.create_user(
             name=input_dto.name,
             email=input_dto.email,
-            hashed_password=input_dto.hashed_password
+            hashed_password=input_dto.password
         )
-        self.uow.commit()
+        # print("from uow", self.uow.get_transaction())
+        await self.uow.commit()
         
         return "ok"
+# class RegisterInactiveUser(Interactor[RequestUserDTO, str]):
+#     def __init__(self, 
+#                  user_repository: UserRepository) -> str:
+#         self.user_repository = user_repository
+
+
+#     async def __call__(self, 
+#                        input_dto: RequestUserDTO) -> str:
+        
+#         await self.user_repository.create_user(
+#             name=input_dto.name,
+#             email=input_dto.email,
+#             hashed_password=input_dto.hashed_password
+#         )
+        
+#         return "ok"

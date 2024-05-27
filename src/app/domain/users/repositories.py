@@ -12,6 +12,9 @@ class UserRepository(Protocol):
     async def get_user_by_id(self, user_id: int):
         raise NotImplementedError
     
+    async def get_user_by_name(self, name: str):
+        raise NotImplementedError
+    
     async def get_user_by_email(self, email: str):
         raise NotImplementedError
     
