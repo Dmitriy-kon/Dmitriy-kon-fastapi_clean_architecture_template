@@ -40,6 +40,13 @@ class SqlalchemyProvier(Provider):
         async with sessionmaker() as session:
             yield session
 
+    # @provide(scope=Scope.REQUEST, provides=UoW)
+    # async def provide_uow(
+    #     self, session_maker: async_sessionmaker[AsyncSession]
+    # ) -> AsyncIterable[AsyncSession]:
+    #     async with session_maker() as session:
+    #         yield session
+
     @provide(scope=Scope.REQUEST, provides=UoW)
     async def provide_uow(
         self, session: AsyncSession
@@ -49,16 +56,15 @@ class SqlalchemyProvier(Provider):
     user_repository = provide(
         SqlalchemyUserRepository, scope=Scope.REQUEST, provides=UserRepository
     )
-    
-    # uow = provide(UoW, scope=Scope.REQUEST)
+
+    # uow = provide(AsyncSession, scope=Scope.REQUEST, provides=UoW)
+
 
 class InDbProvider(Provider):
-    
     @provide(scope=Scope.APP)
     def provide_redis_conf(self) -> RedisConfData:
         return RedisConfData()
-        
-    
+
     redis_sessions = provide(
         RedisSessionGateway, scope=Scope.REQUEST, provides=SessionGateway
     )

@@ -7,6 +7,7 @@ from app.application.usecases.auth.login.identificate_user import IdentificateUs
 from app.application.usecases.auth.login.authorize_user import AuthorizeUser
 
 
+
 class UseCasesProvider(Provider):
     scope = Scope.REQUEST
     
