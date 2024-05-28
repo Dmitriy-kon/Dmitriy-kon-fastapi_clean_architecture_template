@@ -1,7 +1,7 @@
 from typing import Annotated
 
-from pydantic import BaseModel
 from fastapi import Query
+from pydantic import BaseModel
 
 
 class SLimitOffset(BaseModel):

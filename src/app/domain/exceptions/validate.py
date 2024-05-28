@@ -1,5 +1,5 @@
-from .base import DomainException
+from .base import DomainError
 
-class DomainValidationException(DomainException):
+
+class DomainValidationError(DomainError):
     """Exception raised for domain validation errors."""
-        

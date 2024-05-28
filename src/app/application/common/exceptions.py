@@ -1,15 +1,18 @@
-class ApplicationException(Exception):
+class ApplicationError(Exception):
     """Base class for all application exceptions."""
-    
+
     def __init__(self, message: str) -> None:
         super().__init__(message)
         self.message = message
 
-class UserAlreadyExistsException(ApplicationException):
+
+class UserAlreadyExistsError(ApplicationError):
     pass
 
-class UserNotFoundException(ApplicationException):
+
+class UserNotFoundError(ApplicationError):
     pass
 
-class UserPasswordNotMatchException(ApplicationException):
+
+class UserPasswordNotMatchError(ApplicationError):
     pass

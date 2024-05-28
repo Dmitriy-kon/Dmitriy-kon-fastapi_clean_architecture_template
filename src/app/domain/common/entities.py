@@ -3,7 +3,7 @@ from typing import Generic, TypeVar
 
 from app.domain.common.value_objects import ValueObject
 
-# Создаёт переменную типа EntityId, которая ограничена типом ValueObject. 
+# Создаёт переменную типа EntityId, которая ограничена типом ValueObject.
 # Это означает, что EntityId может быть любым подклассом ValueObject.
 EntityId = TypeVar("EntityId", bound=ValueObject)
 

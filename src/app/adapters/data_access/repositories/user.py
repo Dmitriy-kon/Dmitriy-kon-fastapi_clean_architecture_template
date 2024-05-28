@@ -1,16 +1,18 @@
-from sqlalchemy import select, insert, update, delete
+from sqlalchemy import delete, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.adapters.data_access.models.user import UserDb
 from app.domain.users.entities import User
 from app.domain.users.repositories import UserRepository
-from app.adapters.data_access.models.user import UserDb
 
 
 class SqlalchemyUserRepository(UserRepository):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    async def get_all_users(self, limit: int = 20, offset: int = 0) -> list[User]:
+    async def get_all_users(
+        self, limit: int = 20, offset: int = 0
+    ) -> list[User]:
         stmt = select(UserDb).limit(limit).offset(offset)
 
         users_result = await self.session.execute(stmt)
@@ -28,7 +30,7 @@ class SqlalchemyUserRepository(UserRepository):
         if user is None:
             return None
         return user.to_entity()
-    
+
     async def get_user_by_name(self, name: str):
         stmt = select(UserDb).where(UserDb.name == name)
 
@@ -48,23 +50,22 @@ class SqlalchemyUserRepository(UserRepository):
         return user.to_entity()
 
     async def create_user(self, name: str, email: str, hashed_password: str):
-        # print(self.session.get_transaction())
         stmt = insert(UserDb).values(
             name=name,
             email=email,
             hashed_password=hashed_password,
-            is_active=False
+            is_active=False,
         )
         await self.session.execute(stmt)
-        
 
     async def update_user(self, name: str, email: str, hashed_password: str):
-        stmt = update(UserDb).where(UserDb.email == email).values(
-            name=name,
-            hashed_password=hashed_password
+        stmt = (
+            update(UserDb)
+            .where(UserDb.email == email)
+            .values(name=name, hashed_password=hashed_password)
         )
         await self.session.execute(stmt)
-        
+
     async def delete_user(self, name: str, email: str, hashed_password: str):
         stmt = delete(UserDb).where(UserDb.email == email)
         await self.session.execute(stmt)

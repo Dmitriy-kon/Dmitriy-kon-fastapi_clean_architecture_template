@@ -1,18 +1,23 @@
-from typing import AsyncIterable
+from collections.abc import AsyncIterable
 
-from dishka import Provider, Scope, provide, AnyOf
+from dishka import Provider, Scope, alias, provide
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
-    create_async_engine,
     async_sessionmaker,
+    create_async_engine,
 )
 
-from app.domain.users.repositories import UserRepository
-from app.application.abstraction.uow import UoW
-from app.application.abstraction.session_gateway import SessionGateway
-from app.adapters.in_memory_db.redis_gataway import RedisSessionGateway, RedisConfData
+from app.adapters.auth.login_process import LoginProcessorSql
 from app.adapters.data_access.repositories.user import SqlalchemyUserRepository
+from app.adapters.in_memory_db.redis_gataway import (
+    RedisConfData,
+    RedisSessionGateway,
+)
+from app.application.abstraction.login_processor import LoginProcessor
+from app.application.abstraction.session_gateway import SessionGateway
+from app.application.abstraction.uow import UoW
+from app.domain.users.repositories import UserRepository
 from app.main.config import DatabaseConfig
 
 
@@ -47,17 +52,20 @@ class SqlalchemyProvier(Provider):
     #     async with session_maker() as session:
     #         yield session
 
-    @provide(scope=Scope.REQUEST, provides=UoW)
-    async def provide_uow(
-        self, session: AsyncSession
-    ) -> AsyncSession:
-        return session
+    # @provide(scope=Scope.REQUEST, provides=UoW)
+    # async def provide_uow(
+    #     self, session: AsyncSession
+    # ) -> AsyncSession:
+    #     return session
 
     user_repository = provide(
         SqlalchemyUserRepository, scope=Scope.REQUEST, provides=UserRepository
     )
+    login_processor = provide(
+        LoginProcessorSql, scope=Scope.REQUEST, provides=LoginProcessor
+    )
 
-    # uow = provide(AsyncSession, scope=Scope.REQUEST, provides=UoW)
+    uow = alias(source=AsyncSession, provides=UoW)
 
 
 class InDbProvider(Provider):
