@@ -27,7 +27,7 @@ class RedisSessionGateway(SessionGateway):
         await self.client.set(session_id, user_name, self.expire)
         return session_id
 
-    async def get_session(self, session_id: str) -> str | None:
+    async def get_session(self, session_id: str) -> bytes | None:
         return await self.client.get(session_id)
 
     async def delete_session(self, session_id: str) -> None:

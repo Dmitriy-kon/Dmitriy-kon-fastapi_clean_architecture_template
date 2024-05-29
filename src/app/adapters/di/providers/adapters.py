@@ -8,13 +8,13 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from app.adapters.auth.login_process import LoginProcessorSql
+from app.adapters.auth.password_process import PasswordManagerBcrypt
 from app.adapters.data_access.repositories.user import SqlalchemyUserRepository
 from app.adapters.in_memory_db.redis_gataway import (
     RedisConfData,
     RedisSessionGateway,
 )
-from app.application.abstraction.login_processor import LoginProcessor
+from app.application.abstraction.password_process import PasswordManager
 from app.application.abstraction.session_gateway import SessionGateway
 from app.application.abstraction.uow import UoW
 from app.domain.users.repositories import UserRepository
@@ -61,8 +61,9 @@ class SqlalchemyProvier(Provider):
     user_repository = provide(
         SqlalchemyUserRepository, scope=Scope.REQUEST, provides=UserRepository
     )
-    login_processor = provide(
-        LoginProcessorSql, scope=Scope.REQUEST, provides=LoginProcessor
+
+    password_manager = provide(
+        PasswordManagerBcrypt, scope=Scope.REQUEST, provides=PasswordManager
     )
 
     uow = alias(source=AsyncSession, provides=UoW)

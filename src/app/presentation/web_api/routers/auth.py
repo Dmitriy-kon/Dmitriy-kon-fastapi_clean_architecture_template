@@ -2,10 +2,8 @@ from dishka import FromDishka
 from dishka.integrations.fastapi import DishkaRoute
 from fastapi import APIRouter, Request, Response
 
-from app.adapters.auth.password_process import hash_password
 from app.application.abstraction.session_gateway import SessionGateway
 from app.application.dto.user import RequestUserDTO, RequestUserUpdateDTO
-from app.application.usecases.auth.check_user_unique import CheckUserUnique
 from app.application.usecases.auth.login_user import LoginUser
 from app.application.usecases.auth.register_inactive_user import (
     RegisterInactiveUser,
@@ -19,12 +17,9 @@ auth_router = APIRouter(tags=["auth"], prefix="/auth", route_class=DishkaRoute)
 async def register(
     user: SUserIn,
     register_inactive_user_interactor: FromDishka[RegisterInactiveUser],
-    check_user_unique_interactor: FromDishka[CheckUserUnique],
 ):
-    user.password = hash_password(user.password)
     user_dto = RequestUserDTO(name=user.name, email=user.email, password=user.password)
 
-    await check_user_unique_interactor(user_dto)
     return await register_inactive_user_interactor(user_dto)
 
 
