@@ -2,6 +2,7 @@ from dishka import FromDishka
 from dishka.integrations.fastapi import DishkaRoute
 from fastapi import APIRouter, Request, Response
 
+from app.adapters.auth.session_auth import SessionAuthAdapter
 from app.application.abstraction.session_gateway import SessionGateway
 from app.application.dto.user import RequestUserDTO, RequestUserUpdateDTO
 from app.application.usecases.auth.login_user import LoginUser
@@ -26,25 +27,15 @@ async def register(
 @auth_router.post("/login")
 async def login_json(
     user: SUserLogin,
+    response: Response,
     login_user_interactor: FromDishka[LoginUser],
-    session_gateway: FromDishka[SessionGateway],
-    req: Request,
-    res: Response,
+    session_auth_adapter: FromDishka[SessionAuthAdapter],
 ):
     result = await login_user_interactor(
         RequestUserUpdateDTO(name=user.name, password=user.password)
     )
-
-    old_session_id = req.cookies.get("session_id")
-    old_session_res = None
-
-    if old_session_id:
-        old_session_res = await session_gateway.get_session(old_session_id)
-    if old_session_res:
-        await session_gateway.delete_session(old_session_id)
-
-    session_id = await session_gateway.create_session(user.name)
-
-    res.set_cookie(key="session_id", value=session_id, max_age=3600, httponly=True)
+    await session_auth_adapter.delete_session_if_exists()
+    session_id = await session_auth_adapter.create_session(user.name)
+    session_auth_adapter.set_session_cookie(response, session_id)
 
     return {"message": result}

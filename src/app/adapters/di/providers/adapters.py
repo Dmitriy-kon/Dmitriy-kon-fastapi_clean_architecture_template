@@ -1,6 +1,7 @@
 from collections.abc import AsyncIterable
 
-from dishka import Provider, Scope, alias, provide
+from dishka import Provider, Scope, alias, from_context, provide
+from fastapi import Request, Response
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -9,6 +10,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from app.adapters.auth.password_process import PasswordManagerBcrypt
+from app.adapters.auth.session_auth import SessionAuthAdapter
 from app.adapters.data_access.repositories.user import SqlalchemyUserRepository
 from app.adapters.in_memory_db.redis_gataway import (
     RedisConfData,
@@ -77,3 +79,16 @@ class InDbProvider(Provider):
     redis_sessions = provide(
         RedisSessionGateway, scope=Scope.REQUEST, provides=SessionGateway
     )
+
+
+class SessionAuthProvider(Provider):
+    scope = Scope.REQUEST
+
+    request = from_context(provides=Request, scope=Scope.REQUEST)
+    # response = from_context(provides=Response, scope=Scope.REQUEST)
+
+    @provide(scope=Scope.REQUEST)
+    def provide_auth(
+        self, request: Request, session_gateway: SessionGateway
+    ) -> SessionAuthAdapter:
+        return SessionAuthAdapter(request, session_gateway)
