@@ -1,9 +1,9 @@
-from typing import Generic, TypeVar
+from typing import Protocol, TypeVar
 
-InputDTO = TypeVar("InputDTO")
-OutputDTO = TypeVar("OutputDTO")
+InputDTO_contra = TypeVar("InputDTO_contra", contravariant=True)
+OutputDTO_co = TypeVar("OutputDTO_co", covariant=True)
 
 
-class Interactor(Generic[InputDTO, OutputDTO]):
-    async def __call__(self, input_dto: InputDTO) -> OutputDTO:
+class Interactor(Protocol[InputDTO_contra, OutputDTO_co]):
+    async def __call__(self, input_dto: InputDTO_contra) -> OutputDTO_co:
         raise NotImplementedError

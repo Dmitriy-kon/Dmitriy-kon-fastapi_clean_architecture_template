@@ -1,7 +1,7 @@
 from collections.abc import AsyncIterable
 
-from dishka import Provider, Scope, alias, from_context, provide
-from fastapi import Request, Response
+from dishka import Provider, Scope, alias, from_context, provide, 
+from fastapi import Request
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -85,7 +85,6 @@ class SessionAuthProvider(Provider):
     scope = Scope.REQUEST
 
     request = from_context(provides=Request, scope=Scope.REQUEST)
-    # response = from_context(provides=Response, scope=Scope.REQUEST)
 
     @provide(scope=Scope.REQUEST)
     def provide_auth(
