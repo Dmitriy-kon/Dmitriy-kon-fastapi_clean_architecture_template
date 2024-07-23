@@ -1,9 +1,8 @@
 from dishka import FromDishka
 from dishka.integrations.fastapi import DishkaRoute
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Response
 
 from app.adapters.auth.session_auth import SessionAuthAdapter
-from app.application.abstraction.session_gateway import SessionGateway
 from app.application.dto.user import RequestUserDTO, RequestUserUpdateDTO
 from app.application.usecases.auth.login_user import LoginUser
 from app.application.usecases.auth.register_inactive_user import (

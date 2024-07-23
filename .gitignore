@@ -5,3 +5,5 @@ venv
 **Temp
 
 .env*
+**.mypy_cache
+**.ruff_cache

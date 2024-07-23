@@ -19,6 +19,6 @@ class SendEmailForUser(Interactor[RequestUserDTO, str]):
     async def __call__(self, input_dto: RequestUserDTO) -> str:
         code = self.email_processor.get_confirmation_code()
         # save code in db
-        self.email_processor.send_message()
+        self.email_processor.send_message("some")
 
         return code

@@ -1,6 +1,6 @@
 from collections.abc import AsyncIterable
 
-from dishka import Provider, Scope, alias, from_context, provide, 
+from dishka import Provider, Scope, alias, from_context, provide
 from fastapi import Request
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,

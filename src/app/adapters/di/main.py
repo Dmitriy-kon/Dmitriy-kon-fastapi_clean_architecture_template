@@ -15,3 +15,4 @@ def container_factory() -> AsyncContainer:
         InDbProvider(),
         SessionAuthProvider(),
     )
+

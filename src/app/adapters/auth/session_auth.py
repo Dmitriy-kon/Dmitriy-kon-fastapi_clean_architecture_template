@@ -9,7 +9,7 @@ class SessionAuthAdapter:
         self.session_gateway = session_gateway
 
     async def delete_session_if_exists(self) -> None:
-        session_id = self.request.cookies.get("session_id")
+        session_id: str | None = self.request.cookies.get("session_id")
         session_data = None
 
         if session_id:
